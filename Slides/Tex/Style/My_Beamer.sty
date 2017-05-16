@@ -1,0 +1,260 @@
+%%%% This is a style package for my own math beamer presentations.
+%%%% The looks of the standard beamer blocks are redefined, some maths
+%%%% environnements are as well.
+
+\ProvidesPackage{My_Beamer}[2016/03/25 My_Beamer]
+
+\RequirePackage[T1]{fontenc}
+\RequirePackage{graphicx} % Allows including images
+\RequirePackage{tikz} % Needed to tweak graphics
+\RequirePackage[most]{tcolorbox} % Needed to define the definition and theorem 
+\RequirePackage{fourier}
+
+%%%%%%%%%%%%%%% Defining colors %%%%%%%%%%%%%%%
+  
+\definecolor{mDarkBrown}{HTML}{604c38}
+\definecolor{mDarkTeal}{HTML}{23373b}
+\definecolor{mLightBrown}{HTML}{EB811B}
+\definecolor{mLightGreen}{HTML}{14B03D}
+
+%%%%%%%%%%%%%%% Default theme %%%%%%%%%%%%%%%
+  
+\usetheme{metropolis}
+  
+%%%%%%%%%%%%%%% How does the head and footer look like %%%%%%%%%%%%%%%
+
+\setbeamertemplate{navigation symbols}{} % To remove the navigation symbols from the bottom of all slides uncomment this line
+\setbeamertemplate{headline}[default]    % Style of the headline
+\setbeamertemplate{footline}[default]    % Style of footline
+  
+%%%%%%%%%%%%%%% Itemiez bullets %%%%%%%%%%%%%%%
+  
+\setbeamertemplate{itemize item}[circle] % For the style of item bullets
+
+%%%%%%%%%%%%%%% Choosing fonts for document %%%%%%%%%%%%%%%
+
+\usefonttheme{serif}  % For only math in serif add onlymath option in brackets 
+
+%%%%%%%%%%%%%%% Setting color and font for frame titles %%%%%%%%%%%%%%%
+
+\usefonttheme[onlylarge]{structurebold}
+
+%%%%%%%%%%%%%%% Redefining tikz functions %%%%%%%%%%%%%%%
+
+\tikzset{
+  every overlay node/.style={
+    draw=white,fill=white, anchor=north west,
+  },
+}
+% Usage:
+% \tikzoverlay at (-1cm,-5cm) {content};
+% or
+% \tikzoverlay[text width=5cm] at (-1cm,-5cm) {content};
+\def\tikzoverlay{%
+  \tikz[baseline,overlay]\node[every overlay node]
+}%
+
+%%%%%%%%%%%%%%% Redefining shape of blocks %%%%%%%%%%%%%%%
+  
+\renewenvironment{block}[1]{%
+  \begin{tcolorbox}[
+    enhanced,
+    parbox = false,
+    attach boxed title to top left={xshift=3mm,yshift=-2.5mm,yshifttext=-1mm}, 
+    colback=lightgray!20!white,
+    colframe=mDarkTeal,
+    colbacktitle=mDarkTeal,
+    adjusted title = {#1},
+    fonttitle=\bfseries, 
+    arc=0mm,
+    boxed title style={size=small, top=-3pt, bottom=-2pt, colframe=mDarkTeal, arc=0mm} 
+    ]
+  }{%
+  \end{tcolorbox}%
+}
+  
+\newenvironment{shyblock}[1]{%
+  \begin{tcolorbox}[
+    enhanced,
+    parbox = false,
+    attach boxed title to top left={xshift=3mm,yshift=-2.5mm,yshifttext=-1mm}, 
+    colback=white,
+    colframe=mDarkTeal,
+    colbacktitle=white,
+    coltitle=mDarkTeal,
+    adjusted title = {#1},
+    fonttitle=\bfseries, 
+    arc=0mm,
+    boxed title style={size=small, top = -3pt, bottom=-2pt, colframe=white, arc=0mm} 
+    ]
+  }{%
+  \end{tcolorbox}%
+}
+
+\newenvironment{halfshyblock}[1]{%
+  \begin{tcolorbox}[
+    enhanced,
+    parbox = false,
+    attach boxed title to top left={xshift=3mm,yshift=-2.5mm,yshifttext=-1mm}, 
+    colback=white,
+    colframe=mDarkTeal,
+    colbacktitle=white,
+    coltitle=mLightBrown,
+    adjusted title = {#1},
+    fonttitle=\bfseries, 
+    arc=0mm,
+    boxed title style={size=small, top = -3pt, bottom=-2pt, colframe=white, arc=0mm} 
+    ]
+  }{%
+  \end{tcolorbox}%
+}
+  
+\renewenvironment{exampleblock}[1]{%
+  \begin{tcolorbox}[
+    enhanced,
+    parbox = false,
+    attach boxed title to top left={xshift=3mm,yshift=-2.5mm,yshifttext=-1mm}, 
+    colback=mDarkBrown!10!white,
+    colframe=mDarkBrown,
+    colbacktitle=mDarkBrown,
+    adjusted title = {#1},
+    fonttitle=\bfseries, 
+    arc=0mm,
+    boxed title style={size=small, top =-3pt, bottom=-2pt, colframe=mDarkBrown, arc=0mm} 
+    ]
+  }{%
+  \end{tcolorbox}%
+}
+  
+\renewenvironment{alertblock}[1]{%
+  \begin{tcolorbox}[
+    enhanced,
+    parbox = false,
+    attach boxed title to top left={xshift=3mm,yshift=-2.5mm,yshifttext=-1mm}, 
+    colback=mLightBrown!10!white,
+    colframe=mLightBrown,
+    colbacktitle=mLightBrown,
+    adjusted title = {#1},
+    fonttitle=\bfseries,
+    arc=0mm,
+    boxed title style={size=small, top=-3pt, bottom = -2pt, colframe=mLightBrown, arc=0mm} 
+    ]
+  }{%
+  \end{tcolorbox}%
+}
+
+%%%%%%%%%%%%%%% (Re-)Defining theorem-like environnements %%%%%%%%%%%%%%%
+  
+\newenvironment{thm}[1][\unskip]{ % Theoreme
+  \par
+  \noindent
+  \begin{alertblock}{Theorem #1}
+  }{\end{alertblock}}
+
+\newenvironment{prop}[1][\unskip]{ % Proposition
+  \par
+  \noindent
+  \begin{block}{Proposition #1}
+  }{\end{block}}
+  
+\newenvironment{lem}[1][\unskip]{ % Lemme
+  \par
+  \noindent
+  \begin{shyblock}{Lemma #1}
+  }{\end{shyblock}}
+  
+\newenvironment{defn}[1][\unskip]{ % Definition
+  \par
+  \noindent
+  \begin{exampleblock}{Definition #1}
+  }{\end{exampleblock}}
+  
+\newenvironment{rem}[1][\unskip]{ % Remarque
+  \par
+  \vspace{.2\baselineskip}
+  \noindent
+  \textbf{Remark #1 :}
+  }{\par\vspace{5pt}}
+  
+\newenvironment{exemple}[1][\unskip]{ % Exemple
+  \par
+  \vspace{2\baselineskip}
+  \noindent
+  \textbf{Example #1 :}
+}{\par}
+
+\newenvironment{demo}[1][\unskip]{ % Proof
+%  \vspace{2\baselineskip}
+  \noindent
+  \textbf{Proof #1 :}
+}{\hfill $\blacksquare$ \par}
+
+\newenvironment{nota}[1][\unskip]{ % Notation
+  \par
+  \vspace{.2\baselineskip}
+  \noindent
+  \textbf{Notation #1 :}        
+}{\par}
+
+
+\newenvironment{cor}[1][\unskip]{ % Corollaire
+  \par
+  \noindent
+  \begin{shyblock}{Corollary #1}
+  }{\end{shyblock}}
+
+\newenvironment{question}[1][\unskip]{
+  \par
+  \noindent
+  \begin{halfshyblock}{Question #1}
+  }{\end{halfshyblock}}
+
+%%%%%%%%%%%%%%% Empasizing text %%%%%%%%%%%%%%%
+
+\newcommand\mybox[3][mLightBrown]{\textcolor{#1}{\rule{#2}{#3}}}
+
+\newenvironment{paremph}[1][black]{%
+  \begin{tcolorbox}[
+    parbox = false,
+    blanker,
+    borderline west={1.2mm}{0pt}{#1}
+    ]
+    }{\end{tcolorbox}}
+
+%%%%%%%%%%%%%%% No indentation enumerate and itemize environments %%%%%%%%%%%%%%%
+
+\newenvironment{leftenumerate}
+{
+  \setlength{\leftmargini}{0em}
+  \begin{enumerate}
+  }
+  {
+    \setlength{\leftmargini}{2em}
+  \end{enumerate}
+}
+
+\newenvironment{leftitemize}
+{
+  \setlength{\leftmargini}{0em}
+  \begin{itemize}
+  }
+  {
+    \setlength{\leftmargini}{2em}
+  \end{itemize}
+}
+
+%%%%%%%%%%%%%%% Each section creates a frame with the section title %%%%%%%%%%%%%%%
+
+\AtBeginSection[]{
+  \begin{frame}
+  \vfill
+  \centering
+  \usebeamerfont{title}
+  \usebeamercolor[fg]{title}
+  \insertsectionhead\par%
+  \vfill
+  \end{frame}
+}
+   
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%

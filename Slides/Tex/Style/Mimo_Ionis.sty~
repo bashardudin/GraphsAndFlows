@@ -1,0 +1,214 @@
+%%%% This is a style package for Ionisx math beamer presentations. 
+%%%% The looks of the standard beamer blocks are redefined, some
+%%%% maths environnements are as well, and the \photo command for 
+%%%% the author's photo. 
+
+\ProvidesPackage{Mimo_Ionis}[2016/02/23 Style Mimos Ionis]
+
+\RequirePackage[T1]{fontenc}
+\RequirePackage[french]{babel}  % Set up for typography and keywords translation
+\RequirePackage{graphicx} % Allows including images
+\RequirePackage{tikz} % Needed to tweak graphics
+\RequirePackage[most]{tcolorbox} % Needed to define the definition and theorem 
+
+
+%%%%%%%%%%%%%%% Setting language translator %%%%%%%%%%%%%%%
+
+\uselanguage{French}
+\languagepath{French}
+
+%%%%%%%%%%%%%%% Defining colors %%%%%%%%%%%%%%%
+
+\definecolor{coolblack}{rgb}{0.0, 0.18, 0.39}
+\definecolor{sky}{rgb}{0.53, 0.81, 0.92}
+  
+%%%%%%%%%%%%%%% Default theme %%%%%%%%%%%%%%%
+  
+\usetheme{default}
+\usecolortheme{dove}
+  
+%%%%%%%%%%%%%%% How does the head and footer look like %%%%%%%%%%%%%%%
+
+\setbeamertemplate{navigation symbols}{} % To remove the navigation symbols from the bottom of all slides uncomment this line
+\setbeamertemplate{headline}[default]    % Style of the headline
+\setbeamertemplate{footline}[default]    % Style of footline
+  
+%%%%%%%%%%%%%%% Itemiez bullets %%%%%%%%%%%%%%%
+  
+\setbeamertemplate{itemize item}[circle] % For the style of item bullets
+
+%%%%%%%%%%%%%%% Choosing fonts for document %%%%%%%%%%%%%%%
+
+\usefonttheme{serif}  % For only math in serif add onlymath option in brackets 
+
+%%%%%%%%%%%%%%% Setting color and font for frame titles %%%%%%%%%%%%%%%
+
+\setbeamercolor{frametitle}{fg=coolblack} 
+\usefonttheme[onlylarge]{structurebold}
+
+%%%%%%%%%%%%%%% Background wallpaper %%%%%%%%%%%%%%%
+
+\usebackgroundtemplate{\includegraphics[width=\paperwidth,height=\paperheight]{../../../../img/fond_ppt_math_lignes.png}}
+
+%%%%%%%%%%%%%%% Command for the author's photo %%%%%%%%%%%%%%%
+
+\newcommand{\photo}[1]{
+\includegraphics[width=3cm]{#1}
+}%
+
+%%%%%%%%%%%%%%% Defining how title page looks like  %%%%%%%%%%%%%%%
+
+\setbeamercolor{title}{fg=coolblack} 
+\defbeamertemplate*{title page}{customized}[1][]
+{
+  \begin{center}
+    \vfill
+    {
+      \usebeamerfont{title}
+      \usebeamercolor[fg]{title}
+      \inserttitle\par
+      \vspace{5pt}
+      \usebeamercolor[fg]{subtitle}
+      {\Large \textsc{\insertsubtitle}}\par
+    }
+    \vfill
+    \insertauthor\par
+    \insertinstitute\par
+  \end{center}
+}
+
+%%%%%%%%%%%%%%% Redefining shape of blocks %%%%%%%%%%%%%%%
+  
+\renewenvironment{block}[1]{%
+  \begin{tcolorbox}[
+    enhanced,
+    parbox = false,
+    attach boxed title to top left={xshift=3mm,yshift=-2.5mm,yshifttext=-1mm}, 
+    colback=blue!5!white,
+    colframe=coolblack,
+    colbacktitle=coolblack,
+    adjusted title = {#1},
+    fonttitle=\bfseries, 
+    arc=0mm,
+    boxed title style={size=small, top=-3pt, bottom=-2pt, colframe=coolblack, arc=0mm} 
+    ]
+  }{%
+  \end{tcolorbox}%
+}
+  
+\newenvironment{shyblock}[1]{%
+  \begin{tcolorbox}[
+    enhanced,
+    parbox = false,
+    attach boxed title to top left={xshift=3mm,yshift=-2.5mm,yshifttext=-1mm}, 
+    colback=white,
+    colframe=coolblack,
+    colbacktitle=white,
+    coltitle=coolblack,
+    adjusted title = {#1},
+    fonttitle=\bfseries, 
+    arc=0mm,
+    boxed title style={size=small, top = -3pt, bottom=-2pt, colframe=white, arc=0mm} 
+    ]
+  }{%
+  \end{tcolorbox}%
+}
+  
+\renewenvironment{exampleblock}[1]{%
+  \begin{tcolorbox}[
+    enhanced,
+    parbox = false,
+    attach boxed title to top left={xshift=3mm,yshift=-2.5mm,yshifttext=-1mm}, 
+    colback=blue!5!white,
+    colframe=sky,
+    colbacktitle=sky,
+    coltitle=coolblack,
+    adjusted title = {#1},
+    fonttitle=\bfseries, 
+    arc=0mm,
+    boxed title style={size=small, top =-3pt, bottom=-2pt, colframe=sky, arc=0mm} 
+    ]
+  }{%
+  \end{tcolorbox}%
+}
+  
+\renewenvironment{alertblock}[1]{%
+  \begin{tcolorbox}[
+    enhanced,
+    parbox = false,
+    attach boxed title to top left={xshift=3mm,yshift=-2.5mm,yshifttext=-1mm}, 
+    colback=red!5!white,
+    colframe=red!75!black,
+    colbacktitle=red!75!black,
+    adjusted title = {#1},
+    fonttitle=\bfseries,
+    arc=0mm,
+    boxed title style={size=small, top=-3pt, bottom = -2pt, colframe=red!75!black, arc=0mm} 
+    ]
+  }{%
+  \end{tcolorbox}%
+}
+
+%%%%%%%%%%%%%%% (Re-)Defining theorem-like environnements %%%%%%%%%%%%%%%
+  
+\newenvironment{thm}[1][\unskip]{ % Theoreme
+  \par
+  \noindent
+  \begin{alertblock}{Th\'eor\`eme #1}
+  }{\end{alertblock}}
+
+\newenvironment{prop}[1][\unskip]{ % Proposition
+  \par
+  \noindent
+  \begin{block}{Proposition #1}
+  }{\end{block}}
+  
+\newenvironment{lem}[1][\unskip]{ % Lemme
+  \par
+  \noindent
+  \begin{shyblock}{Lemme #1}
+  }{\end{shyblock}}
+  
+\newenvironment{defn}[1][\unskip]{ % Definition
+  \par
+  \noindent
+  \begin{exampleblock}{D\'efinition #1}
+  }{\end{exampleblock}}
+  
+\newenvironment{rem}[1][\unskip]{ % Remarque
+  \par
+  \vspace{.5\baselineskip}
+  \noindent
+  \textbf{Remarque #1 :}
+  }{\vspace{\baselineskip}}
+  
+\newenvironment{exemple}[1][\unskip]{ % Exemple
+  \par
+  \vspace{.5\baselineskip}
+  \noindent
+  \textbf{Exemple #1 :}
+}{\vspace{\baselineskip}}
+
+\newenvironment{preuve}[1][\unskip]{ % Demonstration
+  \par
+  \noindent
+  \textbf{D\'emonstration #1}
+  
+  \vspace{2pt}      
+}{\hfill $\blacksquare$ \vspace{\baselineskip}}
+
+\newenvironment{nota}[1][\unskip]{ % Demonstration
+  \par
+  \noindent
+  \textbf{Notation #1 :}        
+}{\vspace{\baselineskip}}
+
+
+\newenvironment{cor}[1][\unskip]{ % Corollaire
+  \par
+  \noindent
+  \begin{shyblock}{Corollaire #1}
+  }{\end{shyblock}}
+    
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%

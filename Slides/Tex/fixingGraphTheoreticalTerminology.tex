@@ -1,0 +1,302 @@
+\documentclass[32pt,aspectratio=169]{beamer}
+
+\usepackage[utf8]{inputenc} % Character encoding, choose your machine's default
+                              % encoding; latin1 or utf8. If you want it read by
+                              % others choose latin1.
+\pdfinfo{
+   /Author (Bashar Dudin)
+   /Title  (Fixing Graph Theoretical Terminology)
+   /Subject (Networks and Flows on Graphs)
+}
+
+\usepackage{./Style/My_Beamer} % This is my Beamer style.
+\usepackage{./Style/Mystyle} % This is my own defined commands
+
+%----------------------------------------------------------------------------------------
+%   TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\author[BD]{Bashar Dudin}
+
+\institute[]{EPITA}
+
+\title{Networks and Flows on Graphs} %
+\subtitle{Fixing Graph Theoretical Terminology}
+
+\begin{document}
+
+\begin{frame}[plain]
+\titlepage % Print the title page as the first slide
+\end{frame}
+
+\begin{frame}{What Is a Graph?}
+  \begin{defn}
+    A \emph{directed graph} (or \emph{digraph}) $G$ is given by a set $V$ of
+    \emph{vertices} together with a set $A$ of \emph{arrows}; an arrow being an
+    (ordered) couple $a = (x,y)$ of vertices. The vertex $x$ is called
+    the \emph{source} of $a$ while $y$ is its \emph{target}. We write $G = (V, A)$
+    for the digraph $G$.
+  \end{defn}
+  \pause
+  \begin{question}
+    What is the most general digraph you can draw? Can you have two
+    loops for a single edge? How many arrows in between two vertices?
+  \end{question}
+\end{frame}
+
+\begin{frame}{What Is a Graph?}
+  \begin{defn}
+    An \emph{(undirected) simple graph} $G$ is given by a set $V$ of vertices
+    together with a set $A$ of \emph{edges}; an edge being an (unordered)
+    pair $e = \{x,y\}$ of vertices. We write $G = (V, E)$ for the
+    digraph $G$.
+  \end{defn}
+  \pause
+  \begin{rem}
+    Notice that to be a \alert{pair} $\{x, y\}$ you need to have
+    $x \neq y$. So, simple graphs do not have loops.
+  \end{rem}
+
+  \begin{overlayarea}{\textwidth}{.35\textheight}
+    \begin{onlyenv}<3-4| handout:1>
+      There is a canonical way of attaching a simple graph to a digraph
+      $G$ :
+      \begin{itemize}
+      \item<3-> Delete loops of the set of arrows of $G$, these are given by
+        couples having two identical entries
+      \item<4-> build up the set of edges as the collectiong of pairs
+        $\{x, y\}$ for each arrow $(x, y)$ in $G$.
+      \end{itemize}
+    \end{onlyenv}
+    \begin{onlyenv}<5|handout:2>
+      \begin{question}
+        Can you think of others ways of defining a graph? For instance how
+        would you give a definition to allow multiple arrows in a digraph?
+        Or to allow loops and multiple edges in a graph?
+      \end{question}
+    \end{onlyenv}
+  \end{overlayarea}
+\end{frame}
+
+\begin{frame}{Finding Your Way in Graphs}
+  \begin{columns}
+    \begin{column}{.55\textwidth}
+      \begin{halfshyblock}{Graph}
+        {\small
+        \textbf{Chain :} A sequence of edges where each edge has a
+        common vertex with the preceding one (except the first), the
+        other being common with the next edge (except the last).
+
+        \textbf{Cycle :} A closed chain.
+
+        \textbf{Simple chain :} Containing each edge at most once.
+
+        \textbf{Elementary chain :} Containing each vertex at most
+        once.
+
+        \textbf{Hamiltonian chain :} Passing once by each edge.
+
+        \textbf{Eulerian chain :} Passing once by each vertex.
+
+        \textbf{length of chain :} The number of edges in the chain.
+      }
+      \end{halfshyblock}
+    \end{column}
+    \begin{column}{.55\textwidth}
+      \begin{halfshyblock}{Digraph}
+        {\small \textbf{Path :} A sequence of arrows where each
+          arrow's target is the source of the next arrow (except the
+          last).
+
+          \vspace{\baselineskip}
+
+        \textbf{Circuit :} A closed path.
+
+        \textbf{Simple path :} Containing each arrow at most once.
+
+        \textbf{Elementary path :} Containing each vertex at most
+        once.
+
+        \textbf{Hamiltonian path :} Passing once by each arrow.
+
+        \textbf{Eulerian path :} Passing once by each vertex.
+
+        \textbf{length of chain :} The number of arrows in the chain.
+      }
+      \end{halfshyblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Connectedness}
+\begin{columns}[T]
+    \begin{column}{.55\textwidth}
+      \begin{halfshyblock}{Graph}
+        {\small
+          \textbf{Connectedness :} A graph is said to be
+          \emph{connected} if any two distinct vertices are the endpoints of
+          a chain.
+
+          \textbf{Connected components :} Maximal subgraphs that are
+          connected.
+          }
+      \end{halfshyblock}
+    \end{column}
+    \begin{column}{.55\textwidth}
+      \begin{halfshyblock}{Digraph}
+        {\small
+          \textbf{Strong connectedness :} A digraph is said to be
+          \emph{strongly connected} if any two distinct vertices are the
+          initial source and target of a path.
+
+          \textbf{Strongly connected components :} Maximal subraphs
+          that are strongly connected.}
+      \end{halfshyblock}
+    \end{column}
+  \end{columns}
+  \vspace{\baselineskip}
+  \begin{rem}
+    A digraph is said to be connected if its underlying graph is
+    connected. Connected components of a digraph are defined the
+    same way.
+  \end{rem}
+\end{frame}
+
+\begin{frame}{Two extreme cases of connected graphs}
+  \begin{columns}[T]
+    \begin{column}{.55\textwidth}
+      \begin{halfshyblock}{Trees}
+        {\small
+        A tree $T$ is a graph where each two vertices are linked by
+        exactly one chain. It is equivalently given by
+        \begin{itemize}
+        \item $T$ is connected and cycle-free
+        \item $T$ is connected of maximal order
+        \item $T$ is connected and deleting any edge disconnects it
+        \item $T$ is cycle-free and adding any edge creates one.
+        \end{itemize}
+        }
+      \end{halfshyblock}
+    \end{column}
+    \begin{column}{.55\textwidth}
+      \begin{halfshyblock}{Complete Graphs}
+        {\small
+        The complete graph $\mathcal{K}_n$ is the graph having $n$
+        vertices and all possible edges linking them.
+
+        \vspace{\baselineskip}
+
+        It has exactly $\displaystyle{\frac{n(n-1)}{2}}$ edges.
+
+        \vspace{\baselineskip}
+
+        Can you draw $\mathcal{K}_5$ on a paper without having two
+        edges overlapping?
+        }
+      \end{halfshyblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Adjacency Matrix}
+  \begin{defn}
+    Let $G = (V, E)$ be a graph. Two distinct vertices of $G$ are said
+    to be adjacent if they are endpoints of the same edge.
+  \end{defn}
+  \pause One can represent a graph in a machine in one of the two
+  following ways:
+  \begin{itemize}
+  \item<3->[\textcolor<5->{lightgray!30!white}{\textbullet}]
+  \textcolor<5->{lightgray!30!white}{As a collection of vertices, each
+    coming with its list of adjacent vertices}
+  \item<4-> As a matrix called the \emph{adjacency matrix} of the graph.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Adjacency Matrix}
+  \begin{defn}
+    Let $G$ be a graph (resp. digraph) having $n$ vertices. The
+    \emph{adjacency matrix} of $G$ is a square matrix having $n$
+    columns and $n$ rows, identically indexed by the vertices. Entry
+    $(i, j)$ is $1$ iff there is an edge (arrow) from $i$ to $j$,
+    otherwise it is zero.
+  \end{defn}
+  \pause
+  \begin{rem}
+    The adjacency matrix of a graph is symmetric. A digraph having a
+    symmetric adjacency matrix has, for any given arrow $(x, y)$
+    between distinct vertices, an arrow $(y, x)$ going the other way
+    around. \pause That's the reason why some mathematical textbooks see a
+    graph as a digraph having this property. In that context arrows
+    are called half-edges.
+  \end{rem}
+  \pause
+  \begin{question}
+    Do you know any interesting theoretical results about symmetric
+    matrices?
+  \end{question}
+\end{frame}
+
+\begin{frame}{Adjacency Matrix}
+  \begin{prop}
+    Let $G$ be either a graph or a digraph and write $M$ for its
+    adjacency matrix. For any given $k \in \N^*$, the matrix $M^k$ has
+    entry $(i, j)$ equal to the number of chains (paths) having source
+    $i$ and target $j$.
+  \end{prop}
+  \pause
+  \setlength\columnseprule{.1pt}
+  \begin{multicols}{2}
+    \begin{demo}
+      This is done by induction. In case $k = 1$, a path of length $1$
+      is just an edge (or an arrow) and this is just the definition of
+      the adjacency matrix. \pause Assume that entries of the matrix
+      $M^k$ correspond to the number of chains (paths) from the row to
+      the column index. Let $a_k[i, j]$ be the $(i, j)$ coefficient of
+      $M^k$. Then the entry $a_{k+1}[i, j]$ of $M^{k+1}$ is given by
+      \begin{align*}
+        a_{k+1}[i, j] &= \sum_{\ell = 1}^n a_k[i, \ell]a_1[\ell, j]\\
+                      & = \sum_{\big\{\ell \big| \textrm{$\ell$ is adjacent to $j$}\big\}} a_k[i, \ell]
+      \end{align*}
+      which is exactly what we are looking for.
+    \end{demo}
+  \end{multicols}
+\end{frame}
+
+\begin{frame}{Generalization and Variant of Adjacency Matrix}
+  \begin{defn}
+    Let $G$ be a graph (resp. digraph) having $n$ vertices and
+    \emph{weighted} edges (resp. arrows). The \emph{adjacency matrix}
+    of $G$ is a square matrix having $n$ columns and $n$ rows,
+    identically indexed by the vertices. If there is an edge from $i$
+    to $j$ then entry $(i, j)$ gets the weight of that edge, otherwise
+    entry $(i, j)$ is zero.
+  \end{defn}
+  \pause Given such a graph $G$ with possible weights different from
+  $1$, then the $k$-th power of its adjacency matrix $M$ is less
+  easily interpretable; the contribution of each edge or arrow to a
+  path will be taken with the corresponding weight. \pause
+
+  \vspace{\baselineskip}
+
+  Sometimes we are only interested in the fact there is an edge,
+  arrow, chain or path between two given vertices. In that case we
+  look at the adjacency matrix as a \emph{boolean} matrix. This will
+  be worked out in an exercice later on.
+\end{frame}
+
+\begin{frame}
+  \begin{center}
+    {\Large \textbf{It's all for now!}}
+   \end{center}
+ \end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

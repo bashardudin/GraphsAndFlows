@@ -1,0 +1,330 @@
+\documentclass[32pt, aspectratio=169]{beamer}
+
+\usepackage[utf8]{inputenc} % Character encoding, choose your machine's default
+                              % encoding; latin1 or utf8. If you want it read by
+                              % others choose latin1.
+\pdfinfo{
+   /Author (Bashar Dudin)
+   /Title  (Maximum Flow Problem)
+   /Subject (Networks and Flows on Graphs)
+}
+
+\usepackage{./Style/My_Beamer} % This is my Beamer style.
+\usepackage{./Style/Mystyle} % This is my own defined commands
+
+%----------------------------------------------------------------------------------------
+%   TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\author[BD]{Bashar Dudin}
+
+\institute[]{EPITA}
+
+\title{Networks and Flows on Graphs} %
+\subtitle{Maximum Flow Problem}
+
+\begin{document}
+
+\begin{frame}[plain]
+\titlepage % Print the title page as the first slide
+\end{frame}
+
+\begin{frame}{What is it about?}
+  \begin{halfshyblock}{Maximum Flow Problem}
+    You have a water network together with a unique source. Each water
+    conduct has a maximum water flow capacity. Using the whole network
+    how can you maximize the water flow at a given sink?
+  \end{halfshyblock}
+\end{frame}
+
+\begin{frame}{Mathematical Modeling}
+  A (transportation) network is a simple digraph $G = (V, A)$ having a
+  single source $s$, a single sink $t$, and for each arrow $a$ of $G$
+  a valued capacity $c(a)$.
+  \pause
+  \begin{defn}
+    A flow on a network $G$ is a map $f: A \to \R_+$ such that:
+    \begin{itemize}
+    \item For each $a \in A$, $f(a) \leq c(a)$,
+    \item For each vertex $v$, except for the source and sink, the sum
+      of values $f$ takes on ingoing arrows is equal to the sum taken
+      by $f$ on outgoing arrows. In a more pedantic fashion
+      \begin{displaymath}
+        \forall v \in V\setminus \{s, t\}, \quad \sum_{\{a | a \to s\}} f(a) = \sum_{\{a | s \to a\}}f(a)
+      \end{displaymath}
+    \end{itemize}
+  \end{defn}
+\end{frame}
+
+\begin{frame}{Mathematical Modeling}
+  \begin{defn}
+    The value $\val\big[f\big]$ of a flow $f$ on a network $G = (V, A)$ is the
+    sum of values taken by $f$ on arrows going into $t$.
+  \end{defn}
+  \pause
+  \begin{halfshyblock}{Maximum Flow Problem}
+    Given a network $G$ find a flow $f$ on $G$ with maximum value
+    flow.
+  \end{halfshyblock}
+\end{frame}
+
+\begin{frame}{Cuts}
+  \begin{defn}[of a cut]
+    A cut of a digraph $G=(X, A)$ is a subset $S$ of vertices such that $S$
+    contains the source $s$ but not the sink $t$.
+  \end{defn}
+  \pause
+  We write $\overline{S}$ for the complement of $S$ in $X$, the set
+  of arrows having tail in $S$ and head in $\overline{S}$ is written
+  $\big(S, \overline{S} \big)$.
+  \begin{rem}
+    The two simplest cuts are respectively given by the cut only
+    containing the source and the one containing every vertex but the sink.
+  \end{rem}
+  \pause
+  \begin{defn}
+    Given a flow $f$ on a network $G= (X, A)$. The value flow
+    $f\big[S\big]$ at a cut $S$ of $G$ is the sum
+    $f\big[S, \overline{S} \big]$ of values taken by $f$ on elements in
+    $\big(S, \overline{S}\big)$ minus the sum $f\big[\overline{S}, S\big]$
+    of values taken by $f$ on $\big(\overline{S}, S\big)$.
+  \end{defn}
+\end{frame}
+
+\begin{frame}{Cuts}
+  \begin{prop}
+    Given a flow $f$ on a network $G$ the value flow at any cut
+    is independant of the cut.
+  \end{prop}
+  \begin{overlayarea}{\textwidth}{.65\textheight}
+    \begin{onlyenv}<2| handout:1>
+      \vspace{2pt}
+      This means the value of a given flow can be recovered as the
+      value at any cut. In particular, the value flow is equal to the
+      sum of values taken by the flow at arrows going out of the
+      source.
+    \end{onlyenv}
+
+    \begin{onlyenv}<3-| handout:2>
+      \vspace{2pt}
+      \begin{demo}
+    Let $S_\infty$ be the cut of $G$ containing everything but the
+    sink. Let
+    $S \subsetneq S_1 \subsetneq \cdots \subsetneq S_\infty$ be a
+    maximal sequence of cuts (convince yourself that $S_{k+1}$ has
+    exactly one more vertex than $S_k$). By definition
+    \begin{displaymath}
+      f\big[S_\infty\big] = \val\big[f\big]
+    \end{displaymath}
+    Let $v_{k+1}$ be the only vertex in $S_{k+1}$ but not in $S_k$.
+    \begin{displaymath}
+      f\big[S_{k+1}\big]  =
+      f\big[S_{k}\big] - \sum_{S_{k} \to a \to v_{k+1}} f(a)
+      + \sum_{v_{k+1} \to a \to S_{k}} f(a)
+       + \sum_{v_{k+1} \to a \to \smash{\overline{S}}_{k+1}} f(a)
+      - \sum_{\smash{\overline{S}_{k+1}}\to a \to v_{k+1}} f(a)
+    \end{displaymath}
+    These last four terms are exactly the difference between the
+    values of $f$ at ingoing arrows into $v_{k+1}$ and outgoing ones
+    from $v_{k+1}$. This difference is zero.
+  \end{demo}
+\end{onlyenv}
+\end{overlayarea}
+\end{frame}
+
+\begin{frame}{Cuts}
+  \begin{defn}
+    Given an s-t cut $S$ of $G$, we call \emph{capacity} of $S$ the
+    non-negative number
+    \begin{displaymath}
+      c\big[S\big] = \sum_{a \in (S, \smash{\overline{S}})} c(a).
+    \end{displaymath}
+  \end{defn}
+  \begin{halfshyblock}{Facts}
+    Let $f$ be a flow on a network $G$ and let $S$ be an s-t cut of
+    $G$.
+    \begin{itemize}
+      \item $\val\big[f\big] \leq c\big[S\big]$
+      \item $\val\big[f\big] = c\big[S\big]$ iff for all
+        $a \in \big(S, \overline{S}\big)$, $f(a) = c(a)$ and for all
+        $a \in \big(\overline{S}, S\big)$, $f(a) = 0$.
+    \end{itemize}
+  \end{halfshyblock}
+  Thus, if $\val\big[f\big] = c\big[S\big]$ then $f$ is a flow having
+  maximal flow value and $S$ is an s-t cut having minimal capacity.
+\end{frame}
+\begin{frame}{Max-Flow Min-Cut Theorem}
+\begin{thm}
+    The maximum value over all s-t flows is equal to the minimum
+    capacity over all s-t cuts.
+  \end{thm}
+  \pause
+  A more precise statement is to say that, given a network $G$, there
+  is a flow $f$ and an s-t cut $S$ such that
+  $\val\big[f\big] = c\big[S\big]$ iff $f$ has maximum value among
+  flows on $G$ and $S$ has minimum capacity among s-t cuts of $G$.
+  \pause
+  \begin{halfshyblock}{Conclusion}
+    Finding the maximum value of a flow is equivalent to finding a
+    minimizing cut.
+  \end{halfshyblock}
+\end{frame}
+
+\begin{frame}{Ford-Fulkerson Algorithm}
+  A chain $C$ in a network $G$, joining the source $s$ to the sink
+  $t$, comes with a natural orientation (a choice of an arrow for each
+  edge) consistantly going from the source to the sink. We write $C_+$
+  the set of arrows of $G$ supported on $C$ and matching its
+  orientation. We write $C_-$ the set of arrows of $G$ supported on
+  $C$ and opposite to that orientation.  \pause
+  \begin{defn}
+    Let $f$ be a flow on a network $G$. An \emph{augmenting chain} in $G$ is a chain
+    $C$ joining the source $s$ to the sink $t$, such that
+    \begin{displaymath}
+      \alpha = \min\Big\{\min_{a \in C_+}c(a)-f(a), \min_{a \in C_-}f(a)\Big\} > 0
+    \end{displaymath}
+  \end{defn}
+\end{frame}
+
+\begin{frame}{Ford-Fulkerson Algorithm}
+  Let $f$ be a flow on a network $G$. Given an augmenting chain $C$ in
+  $G$ one can modify $f$ along $C$ (and $C$ alone) by adding $\alpha$
+  to each arrow in $C_+$ and substracting $\alpha$ to each arrow in
+  $C_-$. Looking at the value of this new flow $\varphi$ at the source
+  one can see that
+  \begin{displaymath}
+    \val[\varphi] = \val[f] + \alpha
+  \end{displaymath}
+  This shows that $f$ was not a flow of maximim flow value. \pause In fact
+  \begin{prop}
+    A flow is of maximum flow value on a network $G$ iff there are no
+    augmenting chains in $G$.
+  \end{prop}
+  \pause
+  \begin{rem}
+    The fact a flow on a network that doesn't have any augmenting
+    chains is of maximal flow value is harder to grasp. You can get a
+    proof in \emph{Introduction to Algorithms} by Thomas H.~Cormen and
+    al.
+  \end{rem}
+\end{frame}
+
+\begin{frame}{Ford-Fulkerson Algorithm}
+  \begin{algorithm}[H]
+    \caption{Ford-Fulkerson Algorithm}
+    \small{
+      \begin{algorithmic}[1]
+       \Statex
+       \Require $G$ a network and $f$ a flow on $G$
+       \Ensure a maximal flow on $G$
+       \Statex
+       \Procedure{Ford-Fulkerson}{$G$, $f$}
+       \State $(C, \alpha) \gets$ \Call{AugmentingChain}{$G$, $f$}
+       \While{$C \neq$ \textbf{None}}
+       \State $f$ is increased or decreased by $\alpha$ on arrows in $C$ depending on orientation
+       \State $(C, \alpha) \gets$ \Call{AugmentingChain}{$G$, $f$}
+       \EndWhile
+       \EndProcedure
+       \Statex
+     \end{algorithmic}
+     }
+    \end{algorithm}
+\end{frame}
+
+\begin{frame}{Ford-Fulkerson Algorithm}
+  \begin{algorithm}[H]
+    \caption{Finding an augmenting chain}
+    \small{
+    \begin{algorithmic}[1]
+      \Statex
+      \Require $G$ a network and $f$ a flow on $G$
+      \Ensure an augmenting chain on $G$ if any, and $\alpha$
+      \Statex
+      \Function{AugmentingChain}{$G$, $f$}
+      \State Mark the source by a $+$
+      \State Mark head $h$ of any unsaturated arrow $(t, h)$, whose tail is marked, by $+t$
+      \State Mark tail $t$ of any arrow $(t, h)$ having non-zero flow, whose head is marked, by $-h$
+      \If{sink is marked}
+      \State \Return an augmenting chain $C$ by following marks from the sink to the source, and $\alpha$
+      \EndIf
+      \EndFunction
+      \Statex
+    \end{algorithmic}
+    }
+   \end{algorithm}
+\end{frame}
+
+\begin{frame}{Termination}
+  \begin{halfshyblock}{Termination}
+    The Ford-Fulkerson algorithm terminates if all capacities and flow
+    values on arrows are rational.
+  \end{halfshyblock}\pause
+  This is clear : if flow is not of maximal value, we can find an
+  augmenting chain along which we can increase flow value. At some
+  point we get a maximal flow. \pause As to why we get a flow of
+  maximal value : launch Ford-Fulkerson's algorithm one last time,
+  write $S$ for all marked vertices (this is not the set of all
+  vertices because there is no augmenting chains), then the set of all
+  arrows in $\big(S, \overline{S}\big)$ are saturated and all those in
+  $\big(\overline{S}, S\big)$ get flow value $0$. This is enough to
+  say that the capacity of s-t cut $S$ is equal to the value flow we
+  got; i.e. we have a minimal cut and thus a maximal flow.
+  \begin{rem}
+    If you google the Ford-Fulkerson algorithm, you should be able to
+    find counter-examples in the case of irrational capacities.
+  \end{rem}
+\end{frame}
+
+\begin{frame}{Complexity}
+  The complexity of the Ford-Fulkerson algorithm depends on how
+  efficient you are to find augmentig paths, that's why it is
+  sometimes called the Ford-Fulkerson \emph{method} rather than
+  algorithm. \pause Without specifying how we visit vertices we have
+  that
+  \begin{halfshyblock}{Complexity}
+    Given a network $G = (V, A)$ with integer capacities and maximal
+    value flow $m$ the Ford-Fulkerson complexity is $O\big(ma\big)$,
+    where $a$ is the number of arrows of $G$.
+  \end{halfshyblock}
+  To increase flow value by $1$ you need to find an augmenting path by
+  going through arrows of $G$, to possibly mark their sources and
+  targets. Starting by the $0$ flow you need to do it at worst $m$
+  times, each time going through all arrows. \pause
+  \begin{question}
+    Can you imagine modifying the given algorithm for a better
+    complexity?
+  \end{question}
+\end{frame}
+
+\begin{frame}{Further readings}
+  We are done with the basics, we'll be going through a couple of
+  exercices about maximal flows and matchings. \pause Your are
+  encouraged to read about the following two related topics
+  \begin{itemize}
+  \item maximal flows at minimal costs
+  \item general preference based matchings (uses what is sometimes
+    called the \emph{hungarian method}).
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
+
+
+  % Notice that given a flow $f$ on a network $G$ the value of $f$ is
+  % equally the sum of the value flow on arrows going out of the source
+  % (minus the value at the source if there is any). \pause Here is a
+  % way to convince yourself of this fact: \pause Given a vertex $v$ of $G$
+  % call a predecessor of $v$ the tail of any arrow going into $v$. The
+  % value flow of $f$ is the sum of values taken at arrows going into
+  % the sink $t$. The balancing condition at each vertex says this is
+  % also the sum of values taken by $f$ at arrows going into each
+  % predecessor of $t$. If you're careful enough about termination of
+  % such process you can prove the previous claim. It will be proven in
+  % a more general context.
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

@@ -1,0 +1,283 @@
+\documentclass[32pt,aspectratio=169, handout]{beamer}
+
+\usepackage[utf8]{inputenc} % Character encoding, choose your machine's default
+                              % encoding; latin1 or utf8. If you want it read by
+                              % others choose latin1.
+\pdfinfo{
+   /Author (Bashar Dudin)
+   /Title  (Transportation problems)
+   /Subject (Networks and Flows on Graphs)
+}
+
+\usepackage{./Style/My_Beamer} % This is my Beamer style.
+\usepackage{./Style/Mystyle} % This is my own defined commands
+
+%----------------------------------------------------------------------------------------
+%   TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\author[BD]{Bashar Dudin}
+
+\institute[]{EPITA}
+
+\title{Networks and Flows on Graphs} %
+\subtitle{Shortest Path Problems}
+
+\begin{document}
+
+\begin{frame}[plain]
+\titlepage % Print the title page as the first slide
+\end{frame}
+
+\begin{frame}{What is it about?}
+  \begin{halfshyblock}{Shortest path problem}
+    Given a weighted directed graph a shortest path problem is about
+    looking at paths having minimal lengths (weighted lenghts)
+    \begin{itemize}
+    \item[\textcolor<2->{lightgray}{\textbullet}] \textcolor<2->{lightgray}{between two given vertices (single-pair shortest path problem)}
+    \item from a given source to any other vertex in the graph (single-source shortest path problem)
+    \item between all pairs of vertices (all-pairs shortest path problem)
+    \end{itemize}
+  \end{halfshyblock}
+  \pause[3]In order to be able to answer any of these problems the digraphs
+  we're working with need not have any negative valued
+  circuits (in case of single source, ones accessible from the source).
+  \pause[4]
+  \begin{rem}
+    One could look for longest paths in a digraph. For graphs having no
+    positive-valued circuits one can adapt the algorithms solving
+    shortest path problems tweaking them a little.
+  \end{rem}
+\end{frame}
+
+\begin{frame}[t]{Single-source shortest path problem : Ford's Algorithm}
+  \small{
+    \begin{algorithmic}[1]
+      \Require $G$ a digraph having source $s$, $n$
+      vertices and no negative-valued circuits accessible from $s$
+      \Statex write $\nu$ the weight map from the set of arrows to integers
+      \Ensure minimal lengths of paths from $s$
+      \State number vertices arbitrarily $v_0$, $\ldots$, $v_{n-1}$ ensuring $s$ is the first
+      \State initialize the vertex $v_0$ with $\lambda_0 =0$ and all others with $\lambda_i = +\infty$
+
+      \Statex
+      \For{$\ell$ from $0$ to $n-1$}
+      \ForAll{arrows $(v_\ell, v_j)$}
+      \If{$\lambda_j > \lambda_\ell + \nu(v_\ell, v_j)$}
+      \State $\lambda_j \gets \lambda_\ell + \nu(v_\ell, v_j)$
+      \EndIf
+      \EndFor
+      \EndFor
+
+      \State{\Return the list of $\lambda_i$s with the corresponding vertices}
+    \end{algorithmic}
+  }
+  \tikzoverlay[text width=5.5cm] at (8.5cm, 4.8cm) {
+    \begin{tcolorbox}[
+      enhanced,
+      parbox = false,
+      colback=mLightBrown!10!white,
+      colframe=mLightBrown,
+      arc=0mm,
+      ]
+      \small{By adding an extra check to this algorithm one can also
+        detect possible negative-valued circuits, without having to
+        check it beforehand}
+    \end{tcolorbox}%
+  };
+\end{frame}
+
+\begin{frame}[t]{Ford's Algorithm : building a tree of shortest paths}
+    \small{
+      \begin{algorithmic}[1]
+        \Require $G$ a digraph having source $s$, $n$ vertices and
+        no negative-valued circuits accessible from $s$
+        \Statex write $\nu$ the weight map from the set of arrows to integers
+        \Ensure minimal lengths of paths from $s$ \alert{together with a tree $T$ of shortest paths}
+
+       \State number vertices arbitrarily $v_0$, $\ldots$, $v_{n-1}$ ensuring $s$ is the first
+       \State initialize the vertex $v_0$ with $\lambda_0 =0$ and all others with $\lambda_i = +\infty$
+       \Statex \alert{$T$ is a tree having a single vertex $s$}
+       \For{$\ell$ from $0$ to $n-1$}
+       \ForAll{arrows $(v_\ell, v_j)$}
+       \If{$\lambda_j > \lambda_\ell + \nu(v_\ell, v_j)$}
+       \State $\lambda_j \gets \lambda_\ell + \nu(v_\ell, v_j)$
+       \State \alert{$T[j] \gets \ell$}
+       \EndIf
+       \EndFor
+       \EndFor
+
+       \State{\Return the list of $\lambda_i$s with the corresponding vertices \alert{and $T$}}
+     \end{algorithmic}
+     }
+     \tikzoverlay[text width=5.5cm] at (8.5cm, 5.35cm) {
+       \begin{tcolorbox}[
+         enhanced,
+         parbox = false,
+         colback=mLightBrown!10!white,
+         colframe=mLightBrown,
+         arc=0mm,
+         ]
+         \small{The tree $T$ is built up by attaching to each vertex $k$ its
+         predecessor $T[k]$, if there is any. To get a shortest path
+         between $s$ and a vertex $v$ follow the unique path in $T$
+         linking both.}
+       \end{tcolorbox}%
+     };
+\end{frame}
+
+\begin{frame}{Validity and complexity of Ford's algorithm}
+  Let $V$ be the set of vertices of $G$ and $A$ its set of arrows.
+  Line $2$ of Ford's algorithm takes $|V|$ operations. One goes $|V|$
+  times through the loop at line $3$, for each iteration, one goes
+  $|A|$ times through loop at line $4$. In total, we get a complexity
+  for Ford's algorithm of
+  $O\big(|V| + |V||A|\big) = O\big( |V||A|\big)$
+  \begin{halfshyblock}{Validity}
+    An elementary shortest path from $s$ to a vertex $v$ has length at
+    most $|V|-1$. Given such an elementary path $a_0, \ldots, a_m$
+    with $a_0=s$ and $a_m=v$ each sub-path from $s$ to any
+    intermediate vertex is also a shortest path (otherwise we can make
+    a shorter one from $s$ to $v$). Following Ford's algorithm along
+    the previous path, one can show, by induction that $\lambda_m$ can
+    only be equal to the (weighted) length of $a_0, \ldots, a_m$,
+    i.e. the shortest path from $s$ to $v$.
+  \end{halfshyblock}
+\end{frame}
+
+
+\begin{frame}{Single-source shortest path problem : Djikstra's algorithm}
+  \small{
+    \begin{algorithmic}[1]
+      \Require $G$ a digraph having source $s$, $n$
+      vertices and positive weight function $\nu$
+      \Ensure minimal lengths of paths from $s$ to each vertex of $G$
+
+      \State $V$ is the set of vertices of $G$ except for $s$
+      \State initialize $s$ with $\lambda_s =0$, each of its
+      successors $v$ with $\lambda_v = \nu(s, v)$
+      \Statex and all other $v$ with $\lambda_v = +\infty$
+
+      \While{$V \neq \emptyset$}
+      \State find $v$ such that $\lambda_v$ is minimal among elements in $V$
+      \ForAll{arrows $(v, v_j)$}
+      \If{$\lambda_j > \lambda_v + \nu(v, v_j)$}
+      \State $\lambda_j \gets \lambda_v + \nu(v, v_j)$
+      \EndIf
+      \EndFor
+      \State $V \gets V\setminus \{v\}$
+      \EndWhile
+
+      \State{\Return the list of $\lambda$s with the corresponding vertices}
+    \end{algorithmic}
+  }
+  \tikzoverlay[text width=5cm] at (9cm, 5.5cm) {
+    \begin{tcolorbox}[
+      enhanced,
+      parbox = false,
+      colback=mLightBrown!10!white,
+      colframe=mLightBrown,
+      arc=0mm,
+      ]
+      Building a tree of shortest paths can be adapted from what was
+      done previously in the case of Ford's algorithm.
+    \end{tcolorbox}%
+  };
+\end{frame}
+
+\begin{frame}{Validity and Complexity of Djikstra's algorithm}
+  A quick analysis of Djikstra's algorithm, as given here, shows it
+  has complexity $O\big(|V|^2\big)$, where $V$ is the set of vertices
+  of $G$. Indeed, the first loop is taken $|V|$ times, computing the
+  minimum $\lambda_v$ and going through all your adjacent vertices
+  during each loop, gives a final complexity of
+  $O\Big(|V|\big(|V|+|A|\big)\Big)$ where $A$ is the set of arrows of
+  $G$.
+  \begin{rem}
+    Implementation of Djikstra's algorithm can drop complexity to
+    $O\big(|V|\lg|V| + |A|\big)$. This is not very used in practice
+    since involved constants can be huge.
+  \end{rem}
+  \begin{halfshyblock}{Validity}
+    Since all arrows are positively weighted, the minimal potential
+    length $\lambda_v$ chosen at each step of line $4$ in Djikstra's
+    algorithm would not have changed if we had run Ford's algorithm.
+  \end{halfshyblock}
+\end{frame}
+
+\begin{frame}{All-pairs shortest path problem : Floyd-Warshall algorithm}
+  We are looking for shortest paths between any two pairs of vertices
+  in a given digraph $G$ with weighted arrows. \alert{Such paths exist
+    as long as cycles are not negatively valued}.
+
+  \vspace{.5\baselineskip}
+
+  Number the vertices of $G$ from $1$ to $n$. Let $w_{ij}^k$
+  be the minimal weight a path from $i$ to $j$ has, assuming
+  intermediate vertices are in $\{1, \ldots, k\}$. If there is no such
+  path $w_{ij} = +\infty$. If $P$ is a path joining $i$ to $j$ and having
+  intermediate vertices in $\{1, \ldots, k \}$ then
+  \begin{itemize}
+  \item either $P$ does not go through $k$
+  \item or $P$ goes only once through $k$ (only positive valued cycles);
+    it is the concatenation of a path from $i$ to $k$ and one from $k$
+    to $j$, only supported along $\{ 1, \ldots, k-1\}$.
+  \end{itemize}
+  This means that
+  \begin{displaymath}
+    w_{ij}^k = \min\Big( w_{ij}^{k-1}, w_{ik}^{k-1} + w_{kj}^{k-1} \Big)
+  \end{displaymath}
+\end{frame}
+
+\begin{frame}{All-pairs shortest path problem : Floyd-Warshall algorithm}
+    \small{
+      \begin{algorithmic}[1]
+       \Statex
+       \Require $W$ the (generalized) adjacency matrix of a digraph $G$ having weighted arrows and only positve weighted cycles
+       \Ensure minimal (weighted) lengths of paths between any two vertices of $G$
+       \Statex
+       \For{$k \in \{1, \ldots, n\}$}
+       \For{$i \in \{1, \ldots, n\}$}
+       \For{$j \in \{1, \ldots, n\}$}
+       \State $W[i,j] \gets \min\Big(W[i,j], W[i,k] + W[k,j]\Big)$
+       \EndFor
+       \EndFor
+       \EndFor
+       \State \Return $W$
+     \end{algorithmic}
+     }
+\end{frame}
+
+\begin{frame}{Building up shortest paths using output of Floyd-Warshall algorithm}
+  The output is a matrix $\Pi$ where entry at position $(i, j)$ gets a
+  predecessor of $j$ along a shortest path from $i$ to $j$. To get a
+  full shortest path from $i$ to $j$ read the matrix smartly.
+
+  \vspace{.3\baselineskip}
+    \small{
+      \begin{algorithmic}[1]
+        \Require Matrix $W$ of minimal lengths between any two pairs of vertices of $G$
+        \Ensure A matrix $\Pi$ giving at entry $(i, j)$ a predecessor of
+        $j$ along a shortest path from $i$ to $j$
+        \For{$j \in \{1, \ldots, n\}$}
+        \For{$i \in \{1, \ldots, n\}$}
+        \ForAll{arrows $(v,j)$}
+        \If{$W[i,j] \neq +\infty$ and $W[i,j] = W[i,v] + W[v,j]$}
+        \State{$\Pi[i,j] \gets v$}
+        \EndIf
+        \EndFor
+        \EndFor
+        \EndFor
+        \State{\Return{$\Pi$}}
+      \end{algorithmic}
+    }
+\end{frame}
+
+\begin{frame}
+  \centering
+  \Large \textbf{This is all we'll learn on this topic!}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}

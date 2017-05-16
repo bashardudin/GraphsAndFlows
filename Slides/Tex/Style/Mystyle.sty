@@ -1,0 +1,43 @@
+%%%% This package contains my shortcuts and predefined commandes for
+%%%% the Mimo project.
+
+\ProvidesPackage{Mystyle}[2016/03/03 Mon style Mimo]
+
+\RequirePackage{amsmath, amssymb, amsfonts}
+\RequirePackage{xcolor}
+\RequirePackage{colortbl}
+\RequirePackage{tcolorbox}
+\RequirePackage{wrapfig}
+
+\RequirePackage{alltt}
+\RequirePackage{algpseudocode}
+\RequirePackage{algorithm}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+\newcommand{\algorithmicbreak}{\textbf{break}}
+\newcommand{\Break}{\State \algorithmicbreak}
+
+\RequirePackage{pgfplots}
+\usepgfplotslibrary{fillbetween}
+\usepgfplotslibrary{colorbrewer}
+
+\RequirePackage{tikz, tkz-tab}
+\usetikzlibrary{colorbrewer}
+
+\RequirePackage{multicol}
+\RequirePackage{hyperref}
+\RequirePackage{centernot}
+
+%%% Usual commands
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+
+\DeclareMathOperator{\dd}{d\!}
+\DeclareMathOperator{\Sup}{Sup}
+\DeclareMathOperator{\val}{val\!}
+
+
+
