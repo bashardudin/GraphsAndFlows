@@ -1,4 +1,4 @@
-\documentclass[32pt,aspectratio=169, handout]{beamer}
+\documentclass[32pt,aspectratio=169]{beamer}
 
 \usepackage[utf8]{inputenc} % Character encoding, choose your machine's default
                               % encoding; latin1 or utf8. If you want it read by
@@ -61,7 +61,7 @@
       \State initialize the vertex $v_0$ with $\lambda_0 =0$ and all others with $\lambda_i = +\infty$
 
       \Statex
-      \For{$\ell$ from $0$ to $n-1$}
+      \For{$\_$ from $0$ to $n-1$}
       \ForAll{arrows $(v_\ell, v_j)$}
       \If{$\lambda_j > \lambda_\ell + \nu(v_\ell, v_j)$}
       \State $\lambda_j \gets \lambda_\ell + \nu(v_\ell, v_j)$
@@ -98,7 +98,7 @@
        \State number vertices arbitrarily $v_0$, $\ldots$, $v_{n-1}$ ensuring $s$ is the first
        \State initialize the vertex $v_0$ with $\lambda_0 =0$ and all others with $\lambda_i = +\infty$
        \Statex \alert{$T$ is a tree having a single vertex $s$}
-       \For{$\ell$ from $0$ to $n-1$}
+       \For{$\_$ from $0$ to $n-1$}
        \ForAll{arrows $(v_\ell, v_j)$}
        \If{$\lambda_j > \lambda_\ell + \nu(v_\ell, v_j)$}
        \State $\lambda_j \gets \lambda_\ell + \nu(v_\ell, v_j)$
@@ -281,3 +281,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
