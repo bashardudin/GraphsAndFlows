@@ -214,7 +214,19 @@ TSWLatexianTemp*
 *~[0-9]*
 
 # auto folder when using emacs and auctex
-/auto/*
+*auto/*
 
 # expex forward references with \gathertags
 *-tags.tex
+
+# MacOS back up folders
+*.DS_Store
+
+# Emacs temps files
+*~
+*.el
+
+# Jupyter temporary folders
+*ipynb_checkpoints/*
+
+#

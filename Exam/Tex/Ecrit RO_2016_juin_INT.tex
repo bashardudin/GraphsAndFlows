@@ -13,8 +13,8 @@
 
 \pagestyle{fancy}
 \renewcommand{\headrulewidth}{2pt}
-\fancyhead[L]{EPITA\_ING1\_2018\_S6\_PARTIEL\_GREF}
-\fancyhead[R]{June 2016}
+\fancyhead[L]{EPITA\_ING1\_BING\_2018\_S6\_PARTIEL\_GREF}
+\fancyhead[R]{June 2017}
 
 \fancyfoot[C]{\textbf{\thepage}} 
 \fancyfoot[L]{}
@@ -27,7 +27,7 @@
 \begin{document}
 \begin{center}
   
-  {\Large \textbf{Networks and Flows on Graphs}}\\
+  {\Large \textbf{Networks and Flows on Graphs\footnote{Head of course : P.~Siarry.}}}\\
 
   \vspace{10pt}
   {\Large \textit{Final Exam}}
@@ -46,169 +46,116 @@
 
 
 \vspace{\baselineskip}
+
 \begin{question}
-  The following table sums up $16$ tasks, named from $a$ to $p$, each
-  coming with the set of tasks \emph{immediatly} preceding it and the time
-  laps it takes to be done.
-  \vspace{\baselineskip}
-  \begin{displaymath}
-    \begin{tabular}{|c|c|c|}
+  Applying Ford's algorithm compute the lengths of shortests paths
+  linking vertex $a$ to any other vertex in the following graph: 
+    \vspace{2\baselineskip}
+    \begin{center}
+      \begin{tikzpicture}
+        [minimum width={width("b")+1.5em},
+        vertex/.style={circle, draw=black, fill=white, thick},
+        arr/.style={->,>=stealth',semithick},
+        scale=1.2]
+        \node (f) at (13.5, 4.5) [vertex] {$f$};
+        \node (i) at (11.5, 2) [vertex] {$i$}
+           edge[arr] node[right] {$5$} (f);
+        \node (j) at (7.5, 1) [vertex] {$j$}
+           edge[arr] node[below] {$9$} (i)
+           edge[arr] node[below] {$1$} (f);
+        \node (h) at (9, 4.5) [vertex] {$h$}
+           edge[arr] node[above] {$10$} (f)
+           edge[arr] node[above] {$4$} (i)
+           edge[arr] node[right] {$8$} (j);
+        \node (d) at (11.5, 6.5) [vertex] {$d$}
+           edge[arr] node[right] {$8$} (f)
+           edge[arr] node[above] {$4$} (h);
+        \node (g) at (7.5, 7) [vertex] {$g$}
+           edge[arr] node[left] {$2$} (h)
+           edge[arr] node[above] {$5$} (d);
+        \node (e) at (2.5, 1) [vertex] {$e$}
+           edge[arr] node[below] {$5$} (j);
+        \node (c) at (5.5, 2.5) [vertex] {$c$}
+           edge[arr] node[below] {$1$} (e)
+           edge[arr] node[above] {$2$} (j)
+           edge[arr] node[below] {$1$} (h);
+        \node (b) at (4, 7) [vertex] {$b$}
+           edge[arr] node[above] {$1$} (g);
+        \node (l) at (6, 4.5) [vertex] {$l$}
+           edge[arr] node[above] {$12$} (h)
+           edge[arr] node[right] {$6$} (b);
+        \node (k) at (3, 3.5) [vertex] {$k$}
+           edge[arr] node[below] {$3$} (c)
+           edge[arr] node[right] {$8$} (e)
+           edge[arr] node[below] {$5$} (l);
+        \node (a) at (1, 4.5) [vertex] {$a$}
+           edge[arr] node[above] {$2$} (b)
+           edge[arr] node[above] {$10$} (l)
+           edge[arr] node[below] {$7$} (k)
+           edge[arr] node[left] {$13$} (e);
+        \path (g) edge[arr] node[left] {$3$} (l);
+     \end{tikzpicture}
+  \end{center}
+  \vspace{2\baselineskip}
+\end{question}
+
+\begin{question}
+  You're in charge of a construction project. Details and duration of
+  tasks of each trade are summed up in the table below. Each labeled
+  task comes with the list of tasks \emph{immediatly} preceding its
+  start.
+    \vspace{2\baselineskip}
+  \begin{center}
+    \renewcommand{\arraystretch}{1.5}
+    \begin{tabular}{|c|c|c|c|}
       \hline
-      Name of task & Tasks preceding it & Time in weeks \\
+      Label of task & Task description & Time (in weeks)  & Tasks preceding it \\
       \hline
-      a  & -     & 2  \\
+      A  & Maconry & 12 & --   \\
       \hline
-      b  & a     & 8  \\      
+      B  & Framework & 1 & A  \\      
       \hline
-      c  & b     & 1  \\      
+      C  & Zing works & 1 & B  \\      
       \hline
-      d  & c     & 3  \\      
+      D  & Covering & 1 & C  \\      
       \hline
-      e  & d     & 5  \\      
+      E  & Electricity, first stage & 2 & D  \\      
       \hline
-      f  & c     & 1  \\      
+      F  & Sanitary facilities, first stage & 1 & D  \\      
       \hline
-      g  & f     & 2  \\      
+      G  & Glaziery & 1 & D  \\      
       \hline
-      h  & c     & 2  \\      
+      H  & Plastering & 4 & G  \\      
       \hline
-      i  & h     & 3  \\      
+      I  & Sanitary facilites, second stage & 1 & H  \\      
       \hline
-      j  & i     & 8  \\      
+      J  & Electricity, second stage & 1 & H  \\      
       \hline
-      k  & e, g  & 7  \\      
+      K  & Tiling & 6 & I, J  \\      
       \hline
-      l  & k, j  & 2  \\      
+      L  & Shutters & 1 & I  \\      
       \hline
-      m  & l     &  1 \\           
+      M  & Inside carpentry & 2 &  L \\           
       \hline
-      n  & k, j  & 1  \\      
-      \hline
-     o  & b     &  8 \\      
-      \hline
-      p  & m, n  & 1  \\             
+      N  & Ironmongery & 1 & L  \\      
       \hline
     \end{tabular}
-  \end{displaymath}
+  \end{center}
   \vspace{\baselineskip}
   \begin{enumerate}
   \item Draw the MPM (Meta Potential Model) graph of this project
     planning problem.
-  \item Using relevant algorithms, give earliest dates of tasks $a$ to $p$. 
+  \item Using relevant algorithms, give earliest scheduling dates. 
     \begin{itemize}
     \item What is the minimum amount of time the project needs to be done? 
-      
-    \item What is the critical subgraph of the MPM graph?
+    \item What are the critical tasks?
     \end{itemize}
-  \item Using relevant algorithms, give latest dates of tasks $a$ to $p$.
+  \item Using relevant algorithms, give latest scheduling dates.
     \begin{itemize}
-    \item What are the margins and free margins of non-critical tasks?
+    \item What is the total margin of the project? Compute free
+      margins of non-critical tasks?
     \end{itemize}
   \end{enumerate}
-\end{question}
-\begin{question}
-  The following graph represents a network through which goes a
-  flow. A label $f/c$ corresponds to the flow value $f$ along an
-  arrow of capacity $c$.
-  \vspace{\baselineskip}
-  \begin{center}
-    \begin{tikzpicture}
-        [minimum width={width("b")+1.5em},
-        vertex/.style={circle, draw=black, fill=white, thick},
-        arr/.style={->,>=stealth',semithick}]
-        \node (t) at (12,5) [vertex] {$t$};
-        \node (4) at (9.5,3) [vertex] {$4$}
-           edge[
-           arr, 
-           postaction={
-             decorate, 
-             decoration={raise=-2.5ex, text along path, text align=center, text={20/20}}
-           }
-           ] 
-           node[below] {} (t);
-        \node (3) at (9.5,7) [vertex] {$3$}
-           edge[
-           arr, 
-           postaction={
-             decorate, 
-             decoration={raise=1ex, text along path, text align=center, text={10/15}}
-           }
-           ] 
-           node[below] {} (4)
-           edge[
-           arr, 
-           postaction={
-             decorate, 
-             decoration={raise=1ex, text along path, text align=center, text={15/25}}
-           }
-           ]  node[below] {} (t);
-        \node (5) at (7.5,5) [vertex] {$5$}
-           edge[
-           arr, 
-           postaction={
-             decorate, 
-             decoration={raise=1ex, text along path, text align=center, text={10/10}}
-           }
-           ] 
-           node[above] {} (3)
-           edge[
-           arr, 
-           postaction={
-             decorate, 
-             decoration={raise=1ex, text along path, text align=center, text={0/5}}
-           }
-           ]  
-           node[above] {} (4);
-        \node (1) at (5.5,7) [vertex] {$1$}
-           edge[arr] node[above] {$15/15$} (3)
-           edge[
-           arr, 
-           postaction={
-             decorate, 
-             decoration={raise=1ex, text along path, text align=center, text={0/10}}
-           }
-           ] 
-           node[above] {} (5);
-        \node (2) at (5.5,3) [vertex] {$2$}
-           edge[arr] node[below] {$10/10$} (4)
-           edge[
-           arr, 
-           postaction={
-             decorate, 
-             decoration={raise=1ex, text along path, text align=center, text={10/10}}
-           }
-           ] 
-           node[below] {} (5)
-           edge[
-           arr, 
-           postaction={
-             decorate, 
-             decoration={raise=1ex,text along path, text align=center, text={0/10}}
-           }
-           ] 
-           node[below] {} (1);
-        \node (s) at (3,5) [vertex] {$s$}
-           edge[           
-           arr, 
-           postaction={
-             decorate, 
-             decoration={raise=1ex, text along path, text align=center, text={15/30}}
-           }
-           ] 
-           node[above] {} (1)
-           edge[
-           arr, 
-           postaction={
-             decorate, 
-             decoration={raise=-2.5ex, text along path, text align=center, text={20/20}}
-           }
-           ] 
-           node[below] {} (2);
-     \end{tikzpicture}
-  \end{center}
-  \vspace{\baselineskip}
-  Is the given flow of maximum value? If not, using relevant
-  algorithms, show how to get a maximal flow and compute its value.
 \end{question}
 \end{document}
 
